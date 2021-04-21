@@ -1,0 +1,65 @@
+@import url(//fonts.googleapis.com/earlyaccess/notonaskharabic.css);
+
+html,body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Naskh Arabic', serif;
+  text-align: center;
+  background-color: #eee;
+}
+
+.top {
+  background-color: black;
+  color: #eee;
+}
+
+#input,#output{
+  font-family: inherit;
+  font-size: 12pt;
+}
+#input,.outputArea {
+  border: 4px ridge rgba(20,150,180,.4);
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 600px;
+  min-height: 180px;
+  text-align: start;
+}
+#input {
+  direction: ltr;
+}
+#output {
+  white-space: pre-wrap;
+  direction: rtl;
+  max-height: 600px;
+  overflow: scroll;
+}
+
+textarea {
+  resize: vertical;
+}
+
+span.token:hover {
+  background-color: #ccc;
+  /* border: 1px solid #ccc; */
+  border-radius: 4px;
+  cursor: pointer;
+}
+span.multi {
+  color: rgba(20,120,150,1.0);
+  font-weight: bold;
+}
+
+#info {
+  display: block;
+  width: 100%;
+  background-color: #ccc;
+}
+
+#directionToggle {
+  cursor: pointer;
+  color: rgba(20,120,150,1.0);
+  font-weight: bold;
+}
