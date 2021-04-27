@@ -9,36 +9,56 @@ html,body {
   text-align: center;
   background-color: #eee;
 }
+h1 {
+  margin: 0;
+}
+main {
+  width: 640px;
+  margin: 20px auto;
+}
 
 .top {
   background-color: black;
+  padding: 20px;
   color: #eee;
 }
+
+nav li {
+  display: inline-block;
+  list-style: none;
+}
+nav a {
+  font-weight: bold;
+  text-decoration: none;;
+}
+nav a.at { text-decoration: underline; }
+nav a:link { color: #F24E67; }
+nav a:visited { color: #F24E67; }
+nav a:hover { color: #ff8598; }
+nav a:active { color: #942939; }
+
 
 #input,#output{
   font-family: inherit;
   font-size: 12pt;
 }
 #input,.outputArea {
-  border: 4px ridge rgba(20,150,180,.4);
+  border: 4px ridge rgba(41,160,158,.4);
   border-radius: 8px;
-  margin: 20px auto;
-  width: 600px;
+  width: 100%;
   min-height: 180px;
   text-align: start;
+  background-color: #fafafa;
 }
 #input {
   direction: ltr;
+  resize: vertical;
 }
 #output {
   white-space: pre-wrap;
   direction: rtl;
   max-height: 600px;
   overflow: scroll;
-}
-
-textarea {
-  resize: vertical;
 }
 
 span.token:hover {
@@ -52,14 +72,35 @@ span.multi {
   font-weight: bold;
 }
 
-#info {
+.info {
   display: block;
   width: 100%;
   background-color: #ccc;
 }
+.label {
+  font-size: smaller;
+  color: #444;
+  margin: 0 1em;
+}
+#conversions {
+  display: inline;
+}
+.conversion {
+  margin: 0 4pt;
+  cursor: pointer;
+}
 
 #directionToggle {
   cursor: pointer;
-  color: rgba(20,120,150,1.0);
+  color: rgba(41,160,158,1.0);
   font-weight: bold;
 }
+
+figure {
+  margin: 5px;
+  padding: 5px;
+  border: 4px ridge rgba(41,160,158,.4);
+  border-radius: 8px;
+}
+
+p.justify { text-align: justify; }

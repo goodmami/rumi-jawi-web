@@ -4,64 +4,10 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="static/styles.css">
-  <!-- <link rel="icon" href="favicon.ico"> -->
+  <link rel="icon" href="favicon.png">
+  <title>Malay Rumi-Jawi Converter</title>
   <script defer src="static/rumi-jawi.js"></script>
-  <script>
-    var curmap, dir, inp, out;
-
-    function convert(text) {
-      out.innerHTML = text
-        .replace(/([-a-z\u0600-\u06ff\u0762\u200c]+)/ig, function(match, p1) {
-          return renderTokens(match, curmap.get(p1.toLowerCase()) || [p1]);
-        });
-    }
-
-    function renderTokens(match, tokens) {
-      let e = document.createElement('span');
-      e.appendChild(document.createTextNode(tokens[0]));
-      e.setAttribute('data-original', match);
-      e.setAttribute('data-values', tokens);
-      e.className = (tokens.length > 1) ? 'multi token' : 'token';
-      let tmp = document.createElement('div');
-      tmp.appendChild(e);
-      return tmp.innerHTML;
-    }
-
-    function displayTokenMenu(e) {
-      if (e.target && e.target.classList.contains("token")) {
-        let token = e.target;
-        let info = document.getElementById('info');
-        info.innerHTML = token.dataset.original;
-      }
-    }
-
-    function toggleDirection() {
-      if (curmap === rjmap) {
-        curmap = jrmap;
-        dir.innerHTML = "Jawi to Rumi";
-        inp.style.direction = 'rtl';
-        out.style.direction = 'ltr';
-      } else {
-        curmap = rjmap;
-        dir.innerHTML = "Rumi to Jawi";
-        inp.style.direction = 'ltr';
-        out.style.direction = 'rtl';
-      }
-      inp.value = out.textContent;
-      convert(inp.value);
-    }
-    window.addEventListener('DOMContentLoaded', function (event) {
-      curmap = rjmap;
-      dir = document.getElementById('direction');
-      inp = document.getElementById('input');
-      out = document.getElementById('output');
-      inp.addEventListener('input', function(){convert(this.value)}, false);
-      convert(inp.value);
-      document.getElementById('directionToggle')
-        .addEventListener('click', toggleDirection);
-      out.addEventListener('click', function(e) { displayTokenMenu(e) });
-    });
-    </script>
+  <script defer src="static/main.js"></script>
 </head>
 
 <body>
@@ -69,14 +15,28 @@
     <header>
       <h1>Malay Rumi-Jawi Converter</h1>
     </header>
+    <nav>
+      <a class="at" href="index.html">Home</a>
+      &bull;
+      <a href="about.html">About Rumi and Jawi</a>
+      &bull;
+      <a href="qa.html">Q & A</a>
+      &bull;
+      <a href="chart.html">Character Chart</a>
+      &bull;
+      <a href="details.html">Technical Details</a>
+    </nav>
   </div>
 
   <main>
     <textarea id="input" placeholder="Enter text here"></textarea>
-    <div><span id="direction">Rumi to Jawi</span> &mdash; <span id="directionToggle"></a>Switch Direction</a></div>
+    <div><span id="direction">Rumi to Jawi</span> &mdash; <span id="directionToggle">Switch Direction</span></div>
     <div class="outputArea">
-      <div id="info">&nbsp;</div>
-      <p id="output">(results appear here)</p>
+      <div class="info">
+        <span class="label">Original:</span><span id="original"></span>
+        <span class="label">Conversions:</span><div id="conversions"></div>
+      </div>
+      <p id="output"></p>
     </div>
   </main>
 
