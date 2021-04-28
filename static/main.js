@@ -1,10 +1,45 @@
-var curmap, curtok, dir, inp, out, orig, conv;
+var toRumi = false;
+var curtok, dir, inp, out, orig, conv;
 
 function convert(text) {
+  let convertToken = toRumi ? convertJawiToken : convertRumiToken;
   out.innerHTML = text
-    .replace(/([-a-z\u0600-\u06ff\u0762\u200c]+)/ig, function(match, p1) {
-      return renderTokens(match, curmap.get(p1.toLowerCase()) || [p1]);
+    .replace(/([-a-z\u0620-\u06ff\u0762\u200c]+)/ig, function(match, p1) {
+      return renderTokens(match, convertToken(p1));
     });
+}
+
+var normJawi = {
+  '\u0643': '\u06a9',  // Arabic kaf
+  '\u06af': '\u0762',  // Persian/Urdu gaf
+  '\u06ac': '\u0762',  // kaf with dot above
+  '\u060c': '\u002c',  // Arabic comma
+  '\u061b': '\u003b',  // Arabic semicolon
+  '\u061f': '\u003f',  // Arabic question mark
+}
+
+function convertJawiToken(jawi) {
+  let normtoken = [...jawi].map(ch => normJawi[ch] || ch).join('');
+  if (jrmap.has(normtoken)) {
+    return jrmap.get(normtoken);
+  } else if (normtoken.startsWith('\u062f') && jrmap.has(normtoken.substr(1))) {
+    return jrmap.get(normtoken.substr(1)).map(s => "di " + s);
+  } else if (normtoken.endsWith('\u0644\u0647') && jrmap.has(normtoken.slice(0, -2))) {
+    return jrmap.get(normtoken.slice(0, -2)).map(s => s + "lah");
+  } else {
+    return [normtoken]
+  }
+}
+
+function convertRumiToken(rumi) {
+  let normtoken = rumi.toLowerCase();
+  if (rjmap.has(normtoken)) {
+    return rjmap.get(normtoken);
+  } else if (normtoken.endsWith('lah') && rjmap.has(normtoken.slice(0, -3))) {
+    return rjmap.get(normtoken.slice(0, -3)).map(s => s + "\u0644\u0647");
+  } else {
+    return [rumi]
+  }
 }
 
 function renderTokens(match, tokens) {
@@ -50,16 +85,16 @@ function selectConversion(e) {
 }
 
 function toggleDirection() {
-  if (curmap === rjmap) {
-    curmap = jrmap;
-    dir.innerHTML = "Jawi to Rumi";
-    inp.style.direction = 'rtl';
-    out.style.direction = 'ltr';
-  } else {
-    curmap = rjmap;
+  if (toRumi) {
+    toRumi = false;
     dir.innerHTML = "Rumi to Jawi";
     inp.style.direction = 'ltr';
     out.style.direction = 'rtl';
+  } else {
+    toRumi = true;
+    dir.innerHTML = "Jawi to Rumi";
+    inp.style.direction = 'rtl';
+    out.style.direction = 'ltr';
   }
   inp.value = out.textContent;
   orig.innerHTML = '';
@@ -68,7 +103,6 @@ function toggleDirection() {
 }
 
 window.addEventListener('DOMContentLoaded', function (event) {
-  curmap = rjmap;
   dir = document.getElementById('direction');
   inp = document.getElementById('input');
   out = document.getElementById('output');
