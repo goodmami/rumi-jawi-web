@@ -5,8 +5,6 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="static/styles.css">
   <link rel="icon" href="favicon.png">
-  <script defer src="static/rumi-jawi.js"></script>
-  <script defer src="static/main.js"></script>
 </head>
 
 <body>
@@ -28,7 +26,127 @@
   </div>
 
   <main>
+    <h1>Technical Details of the Converter</h1>
+    <article>
+      <h2>Algorithmic Details</h2>
+      <p class="justify">The Rumi&ndash;Jawi converter is at its core a
+      dictionary-based method, meaning that each Rumi or Jawi word is
+      looked up in the dictionary and, if it exists, mapped to one or
+      more forms in the other script. The results are concatenated
+      together into the output box. This process has a few more steps
+      that are detailed below.</p>
+      <h3>Step 1: Tokenization</h3>
+      <p class="justify">A computer does not know what a word is, so,
+      from the perspective of the converter, the input box only contains
+      a sequence of characters. <em>Tokenization</em> is the process of
+      finding word boundaries (or token boundaries, more generally) in
+      this character sequence. Unlike, say, Chinese or Japanese, Malay
+      is written in both Rumi and Jawi with spaces between words and
+      this makes the task considerably easier. There are still some
+      challenges, however, such as punctuation. If words were only ever
+      split at spaces, then it might act as though "<em>makan,</em>"
+      (including the comma) is a word and fail to find an entry in the
+      dictionary, whereas it would have found "<em>makan</em>" (without
+      the comma).</p>
+      <p class="justify">In the converter, sequences of letter
+      characters (Latin or Arabic) are grouped into tokens that get
+      converted while whitespace and most punctuation is ignored.
+      Hyphens (-), however, are used frequently in both Rumi and Jawi
+      for reduplication, and they are therefore included in word tokens.
+      Commas, semicolons, and question marks appear differently in Rumi
+      and Jawi and are therefore handled specially.
+      </p>
 
+      <h3>Step 2: Normalization</h3>
+      <p class="justify">Once words have been found by tokenization,
+      they are passed to a conversion function depending on the
+      direction of conversion (Rumi-to-Jawi or Jawi-to-Rumi), and the
+      first step of conversion is normalization. This step reduces
+      variation that would make conversion difficult.</p>
+      <p>In Rumi-to-Jawi conversion, the only word normalization that is
+      done is downcasing. Computers see <em>A</em> and <em>a</em>
+      as different letters, so if the dictionary contained a word like
+      <em>kuning</em> in the dictionary, it would not find
+      <em>Kuning</em>.</p>
+      <p class="justify">In Jawi-to-Rumi conversion there is no
+      downcasing as Jawi does not have upper and lower case, but there
+      are other reasons for variation. In Jawi, the preferred letter for
+      /k/ sounds is ک rather than the Arabic kaf ك, but some documents
+      nevertheless use the latter, so these are normalized to the
+      former. Similarly, Jawi uses ݢ for the /g/ sound, but sometimes
+      people use گ or ڬ instead, so these latter two get normalized to
+      the first one.</p>
+      <p class="justify">For conversion in both directions, commas,
+      semicolons, and question marks are replaced with the appropriate
+      version.</p>
+
+      <h3>Morphological Analysis</h3>
+      <p class="justify">Malay has a robust morphological system of
+      prefixes and suffixes which, for instance, change the root
+      <em>ajar</em> ("teach"/"learn") to <em>pelajar</em> ("student"),
+      <em>ajaran</em> ("precept"/"lesson"), <em>pelajaran</em>
+      ("education"), <em>belajar</em> ("to learn"), <em>mengajar</em>
+      ("to teach"), etc. Each of these words needs to be in the
+      dictionary to be converted, but the system could be more robust if
+      it could detect these affixes and convert them separately, because
+      then it would only need to contain the roots and the affixes.</p>
+      <p>The converter does not yet do this level of sophisticated
+      morphological analysis, but if it fails to find a word in the
+      dictionary, the word ends in <em>lah</em>/له (a common discourse
+      suffix), and the word without the suffix exists in the dictionary,
+      then the word and the suffix are converted separately. For
+      Jawi-to-Rumi conversion, words beginning with د (<em>di</em>) are
+      similarly converted separately when the whole word is not in the
+      dictionary. This is because the adposition <em>di</em> ("in"/"at")
+      sometimes appears attached to words in Jawi where it would be a
+      separate word in Rumi.</p>
+
+      <h3>Dictionary Lookup</h3>
+      <p class="justify">Once all the tokenization, normalization, and
+      morphological analysis is complete, the actual dictionary lookup
+      step is trivial: if the word is in the dictionary, the mapped form
+      is used; if not, the original word is retained.</p>
+    </article>
+    <article>
+      <h1>Display Details</h1>
+      <p class="justify">Aside from the algorithmic details of
+      conversion, there are some additional technicalities in the way
+      the results are presented.</p>
+
+      <h3>Font</h3>
+      <p class="justify">Jawi is an Arabic script but it uses characters
+      not present in the Arabic language, so it is important to choose a
+      font containing glyphs for these characters. This site uses
+      Google's <a
+      href="https://www.google.com/get/noto/#naskh-arab">Noto Naskh
+      Arabic</a> font as it contains these glyphs and is a neutral
+      typeface without many embellishments.</p>
+
+      <h3>Writing direction</h3>
+      <p class="justify">As Arabic scripts like Jawi are written from
+      right to left and Latin scripts like Rumi are written from left to
+      right, the input and output boxes of the converter are specified
+      with these directionalities so the text displays appropriately.
+      When the "Switch Direction" button is clicked, these
+      directionalities are reversed.</p>
+
+      <h3>Alternatives</h3>
+      <p class="justify">Sometimes a word, whether in Rumi or Jawi, has
+      multiple candidates for conversion. For instance, <em>dan</em>
+      ("and") can be written both as دن and دان in Jawi, and سمبيلن can
+      be either <em>sembilan</em> ("nine") or <em>sambilan</em>
+      ("casual"). The converter tries to assist users in selecting the
+      correct form by highlighting ambiguous conversions in blue.
+      Clicking on the blue words shows the list of conversions at the
+      top of the output box, as well as the original form. The user may
+      then select the preferred conversion which will be used in the
+      output. <strong>Be careful</strong> as any change to the content
+      of the input box, such as typing a character or switching the
+      direction of conversion, will wipe out any selections, so only
+      make such selections when the input will no longer change.</p>
+
+
+    </article>
   </main>
 
 </body>

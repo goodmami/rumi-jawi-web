@@ -5,8 +5,6 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="static/styles.css">
   <link rel="icon" href="favicon.png">
-  <script defer src="static/rumi-jawi.js"></script>
-  <script defer src="static/main.js"></script>
 </head>
 
 <body>
@@ -29,14 +27,69 @@
 
   <main>
     <h2>Questions and Answers</h2>
-    <dl>
-      <dt>Why didn't the converter work for a word?</dt>
-      <dd>The converter looks up each word in a dictionary. If the word
-      does not exist in the dictionary, it cannot convert the
-      script.</dd>
-      <dt>...</dt>
-      <dd></dd>
-    </dl>
+    <article>
+      <h3><a href="#conversion" name="conversion">What is meant by
+      "conversion"? Is it translation, transliteration, or
+      transcription?</a></h3>
+      <p>This question could have multiple answers as all three terms
+      could be applicable. <em>Translation</em>, however, is not very
+      precise as it is the script and not the language that is
+      converted&mdash;the words are Malay whether they are represented
+      in Rumi or Jawi. <em>Transliteration</em>, the substitution of
+      letters, is better, but the purpose of conversion is to
+      represent the sounds of Malay and not the writing system, so
+      <em>transcription</em> is the most precise term. As an example,
+      the Jawi word ڤلاجر translates to English as <em>student</em>
+      and transcribes to Rumi as <em>pelajar</em>, but might be
+      transliterated as <em>plajr</em> as the Jawi does not encode any
+      vowel between the <em>p</em> and <em>l</em> sounds nor the
+      <em>j</em> and <em>r</em> sounds.</p>
+    </article>
+    <article>
+      <h3><a href="#how" name="how">How does the converter
+      work?</a></h3>
+      <p>The converter essentially performs dictionary lookup: for
+      each word, we consult a mapping of Rumi and Jawi forms and, if
+      the word exists in the mapping, we return the form it maps to.
+      This method makes it quick to find good conversions and easy to
+      improve by correcting mistakes in or adding new words to the
+      dictionary, but has the drawback that it cannot convert any
+      words it does not already have in the dictionary. Please refer
+      to <a href="details.html">Technical Details</a> for more
+      information.</p>
+    </article>
+    <article>
+      <h3><a href="#why" name="why">Why does it not convert some
+      words?</a></h3>
+      <p>The converter can only convert words it already has in its
+      dictionary. See <a href="#how">How does the converter work?</a>
+      above for more information.</p>
+    </article>
+    <article>
+      <h3><a href="#why2" name="why2">Why does it not capitalize some
+      names in Rumi?</a></h3>
+      <p>All Rumi forms come from a
+      <a href="https://github.com/goodmami/rumi-jawi/">dictionary</a>
+      which only contains the Rumi and Jawi forms and not information
+      such as part-of-speech or whether something is a name. If the
+      Jawi and Rumi are unambiguously a name and it is not capitalized
+      in Rumi, this is most likely an error that should be fixed.</p>
+    </article>
+    <article>
+      <h3><a href="#error" name="error">I've found an error, how can I
+      report it?</a></h3>
+      <p>We appreciate any offers to help. This converter and the
+      dictionary it uses are managed on <a
+      href="https://github.com">GitHub</a>. If you have a GitHub
+      account, you can directly report issues with the data (e.g., bad
+      or missing conversions) to the <a
+      href="https://github.com/goodmami/rumi-jawi/">rumi-jawi</a>
+      project, and issues with the site to the <a
+      href="https://github.com/goodmami/rumi-jawi-web/">rumi-jawi-web</a>
+      project. If you do not have a GitHub account, you may email
+      the maintainer at <a
+      href="mailto:michaelgoodman@ntu.edu.sg">michaelgoodman@ntu.edu.sg</a>.</p>
+    </article>
   </main>
 
 </body>

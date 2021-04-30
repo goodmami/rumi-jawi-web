@@ -102,5 +102,19 @@ figure {
   border: 4px ridge rgba(41,160,158,.4);
   border-radius: 8px;
 }
+figure table.chars { margin: 10px auto; }
+figure table.chars td {
+  font-size: 20pt;
+  padding: 0 5px;
+}
+figure table.chars td span {
+  padding: 0 8px;
+}
 
 p.justify { text-align: justify; }
+
+article { text-align: left; }
+article h3 a:link { color:initial; }
+article h3 a:visited { color:initial; }
+article h3 a:hover { color:initial; }
+article h3 a:active { color:initial; }

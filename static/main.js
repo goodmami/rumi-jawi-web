@@ -4,22 +4,22 @@ var curtok, dir, inp, out, orig, conv;
 function convert(text) {
   let convertToken = toRumi ? convertJawiToken : convertRumiToken;
   out.innerHTML = text
-    .replace(/([-a-z\u0620-\u06ff\u0762\u200c]+)/ig, function(match, p1) {
+    .replace(/([-a-z\u0620-\u06ff\u0762\u200c]+|[,;?\u060c\u061b\u061f])/ig, function(match, p1) {
       return renderTokens(match, convertToken(p1));
     });
 }
 
-var normJawi = {
-  '\u0643': '\u06a9',  // Arabic kaf
-  '\u06af': '\u0762',  // Persian/Urdu gaf
-  '\u06ac': '\u0762',  // kaf with dot above
-  '\u060c': '\u002c',  // Arabic comma
-  '\u061b': '\u003b',  // Arabic semicolon
-  '\u061f': '\u003f',  // Arabic question mark
-}
+var normJawi = new Map([
+  ['\u0643', '\u06a9'],  // Arabic kaf
+  ['\u06af', '\u0762'],  // Persian/Urdu gaf
+  ['\u06ac', '\u0762'],  // kaf with dot above
+  ['\u060c', '\u002c'],  // Arabic comma
+  ['\u061b', '\u003b'],  // Arabic semicolon
+  ['\u061f', '\u003f'],  // Arabic question mark
+])
 
 function convertJawiToken(jawi) {
-  let normtoken = [...jawi].map(ch => normJawi[ch] || ch).join('');
+  let normtoken = [...jawi].map(ch => normJawi.get(ch) || ch).join('');
   if (jrmap.has(normtoken)) {
     return jrmap.get(normtoken);
   } else if (normtoken.startsWith('\u062f') && jrmap.has(normtoken.substr(1))) {
@@ -31,7 +31,15 @@ function convertJawiToken(jawi) {
   }
 }
 
+var normRumi = new Map([
+  ['\u002c', '\u060c'],  // comma
+  ['\u003b', '\u061b'],  // semicolon
+  ['\u003f', '\u061f'],  // question mark
+])
+
 function convertRumiToken(rumi) {
+  if (normRumi.has(rumi))
+    return normRumi.get(rumi);
   let normtoken = rumi.toLowerCase();
   if (rjmap.has(normtoken)) {
     return rjmap.get(normtoken);
